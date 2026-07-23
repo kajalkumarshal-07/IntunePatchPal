@@ -1,0 +1,246 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 1420" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#1a237e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#283593;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="boxBlue" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1565c0;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1976d2;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="boxGreen" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#2e7d32;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#388e3c;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="boxOrange" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#e65100;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ef6c00;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="boxRed" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#b71c1c;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#c62828;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="boxPurple" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#4a148c;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#6a1b9a;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow" x="-5%" y="-5%" width="115%" height="115%">
+      <feDropShadow dx="2" dy="3" stdDeviation="4" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1400" height="1420" fill="#f5f7fa" rx="8" />
+
+  <!-- Header -->
+  <rect x="0" y="0" width="1400" height="90" fill="url(#headerGrad)" rx="8" />
+  <rect x="0" y="80" width="1400" height="15" fill="url(#headerGrad)" />
+  <text x="700" y="52" text-anchor="middle" fill="#ffffff" font-size="32" font-weight="700">Intune Patch Remediation Pipeline</text>
+  <text x="700" y="76" text-anchor="middle" fill="#b0bec5" font-size="14">Automated Detection &#8594; Grouping &#8594; Remediation via Azure Automation + Microsoft Graph</text>
+
+  <!-- Step 1: Azure Automation Runbook -->
+  <rect x="60" y="130" width="380" height="155" rx="12" fill="url(#boxPurple)" filter="url(#shadow)"/>
+  <text x="250" y="158" text-anchor="middle" fill="#fff" font-size="17" font-weight="700">1. Azure Automation Runbook</text>
+  <text x="250" y="182" text-anchor="middle" fill="#e1bee7" font-size="12">Scheduled (Daily) &#8226; Managed Identity</text>
+  <text x="80" y="205" fill="#fff" font-size="12">&#8226; Authenticates to Graph via Managed Identity</text>
+  <text x="80" y="225" fill="#fff" font-size="12">&#8226; Queries Intune update states for failures</text>
+  <text x="80" y="245" fill="#fff" font-size="12">&#8226; Groups failed devices by errorCode</text>
+  <text x="80" y="265" fill="#fff" font-size="12">&#8226; Creates/updates AAD groups per error code</text>
+
+  <!-- Arrow 1&#8594;2 -->
+  <line x1="440" y1="207" x2="510" y2="207" stroke="#666" stroke-width="2" marker-end="url(#arrowRight)" />
+
+  <!-- Step 2: Graph API -->
+  <rect x="520" y="130" width="380" height="155" rx="12" fill="url(#boxBlue)" filter="url(#shadow)"/>
+  <text x="710" y="158" text-anchor="middle" fill="#fff" font-size="17" font-weight="700">2. Microsoft Graph API</text>
+  <text x="710" y="182" text-anchor="middle" fill="#90caf9" font-size="12">beta/deviceManagement/windowsUpdateStates</text>
+  <text x="540" y="205" fill="#fff" font-size="12">&#8226; deviceId, deviceName</text>
+  <text x="540" y="225" fill="#fff" font-size="12">&#8226; status = failed (or unknown)</text>
+  <text x="540" y="245" fill="#fff" font-size="12">&#8226; errorCode (HRESULT format)</text>
+  <text x="540" y="265" fill="#fff" font-size="12">&#8226; updateCategory, updateVersion</text>
+
+  <!-- Arrow 2&#8594;3 -->
+  <line x1="900" y1="207" x2="970" y2="207" stroke="#666" stroke-width="2" marker-end="url(#arrowRight)" />
+
+  <!-- Step 3: Azure AD Groups -->
+  <rect x="980" y="130" width="360" height="155" rx="12" fill="url(#boxOrange)" filter="url(#shadow)"/>
+  <text x="1160" y="158" text-anchor="middle" fill="#fff" font-size="17" font-weight="700">3. Security Groups</text>
+  <text x="1000" y="182" fill="#ffe0b2" font-size="12" font-family="monospace">Intune-PatchError-{code}</text>
+  <text x="1000" y="205" fill="#fff" font-size="12">&#8226; One Azure AD group per error code</text>
+  <text x="1000" y="225" fill="#fff" font-size="12">&#8226; Device members auto-synced daily</text>
+  <text x="1000" y="245" fill="#fff" font-size="12">&#8226; Devices removed when compliant</text>
+  <text x="1000" y="265" fill="#fff" font-size="12">&#8226; Orphaned groups auto-purged</text>
+
+  <!-- Arrow 3 &#8595; -->
+  <line x1="1160" y1="285" x2="1160" y2="330" stroke="#666" stroke-width="2" marker-end="url(#arrowDown)" />
+
+  <!-- Step 4: Intune Remediations -->
+  <rect x="180" y="340" width="1040" height="120" rx="12" fill="url(#boxGreen)" filter="url(#shadow)"/>
+  <text x="700" y="368" text-anchor="middle" fill="#fff" font-size="17" font-weight="700">4. Intune Proactive Remediations (one per error group)</text>
+  <text x="200" y="392" fill="#fff" font-size="12">&#8226; Detection script identifies the specific error condition on each device</text>
+  <text x="200" y="412" fill="#fff" font-size="12">&#8226; Remediation script runs the targeted fix for that error code</text>
+  <text x="200" y="432" fill="#fff" font-size="12">&#8226; Target groups: Intune-PatchError-XXXX &#8594; only affected devices get the right fix</text>
+  <text x="200" y="452" fill="#fff" font-size="12">&#8226; Runs via Intune agent (SYSTEM context, no user interaction needed)</text>
+
+  <!-- Arrow 4 &#8595; -->
+  <line x1="700" y1="460" x2="700" y2="510" stroke="#666" stroke-width="2" marker-end="url(#arrowDown)" />
+
+  <!-- Step 5: Device -->
+  <rect x="180" y="520" width="1040" height="90" rx="12" fill="url(#boxRed)" filter="url(#shadow)"/>
+  <text x="700" y="548" text-anchor="middle" fill="#fff" font-size="17" font-weight="700">5. Remediated Devices</text>
+  <text x="200" y="572" fill="#fff" font-size="12">&#8226; Patch installed silently (SYSTEM context) &#8226; Logging to %TEMP%\IntuneRemediation.log</text>
+  <text x="200" y="592" fill="#fff" font-size="12">&#8226; Next detection run confirms compliance &#8594; device auto-removed from error group</text>
+
+  <!-- == Error Code + Remediation Table == -->
+  <rect x="40" y="640" width="1320" height="755" rx="8" fill="#fff" stroke="#ccc" stroke-width="1" />
+  <rect x="40" y="640" width="1320" height="35" rx="8" fill="#37474f" />
+  <rect x="40" y="665" width="1320" height="10" fill="#37474f" />
+  <text x="60" y="663" fill="#fff" font-size="15" font-weight="700">Complete Patch Error Code &amp; Remediation Reference</text>
+
+  <!-- Table Header -->
+  <rect x="40" y="675" width="1320" height="25" fill="#eceff1" />
+  <text x="60" y="693" fill="#333" font-size="11" font-weight="700">Error Code</text>
+  <text x="230" y="693" fill="#333" font-size="11" font-weight="700">Hex</text>
+  <text x="350" y="693" fill="#333" font-size="11" font-weight="700">Description</text>
+  <text x="600" y="693" fill="#333" font-size="11" font-weight="700">Remediation Action</text>
+
+  <!-- Row 1 -->
+  <line x1="55" y1="700" x2="1295" y2="700" stroke="#eee" stroke-width="1" />
+  <text x="60" y="717" fill="#555" font-size="10.5" font-family="monospace">-2147024784</text>
+  <text x="230" y="717" fill="#555" font-size="10.5" font-family="monospace">0x80070070</text>
+  <text x="350" y="717" fill="#555" font-size="10.5">Not enough disk space</text>
+  <text x="600" y="717" fill="#b71c1c" font-size="10.5">cleanmgr /sagerun:1, clean WinSxS (DISM /StartComponentCleanup), remove $env:TEMP, expand disk</text>
+
+  <!-- Row 2 -->
+  <line x1="55" y1="737" x2="1295" y2="737" stroke="#eee" stroke-width="1" />
+  <text x="60" y="754" fill="#555" font-size="10.5" font-family="monospace">-2147021879</text>
+  <text x="230" y="754" fill="#555" font-size="10.5" font-family="monospace">0x800704DD</text>
+  <text x="350" y="754" fill="#555" font-size="10.5">Reboot required</text>
+  <text x="600" y="754" fill="#b71c1c" font-size="10.5">Restart-Computer -Force, check PendingFileRenameOperations registry key</text>
+
+  <!-- Row 3 -->
+  <line x1="55" y1="774" x2="1295" y2="774" stroke="#eee" stroke-width="1" />
+  <text x="60" y="791" fill="#555" font-size="10.5" font-family="monospace">-2147010798</text>
+  <text x="230" y="791" fill="#555" font-size="10.5" font-family="monospace">0x80073712</text>
+  <text x="350" y="791" fill="#555" font-size="10.5">Component store corrupted</text>
+  <text x="600" y="791" fill="#b71c1c" font-size="10.5">DISM /Online /Cleanup-Image /RestoreHealth, SFC /ScanNow, repair from source if needed</text>
+
+  <!-- Row 4 -->
+  <line x1="55" y1="811" x2="1295" y2="811" stroke="#eee" stroke-width="1" />
+  <text x="60" y="828" fill="#555" font-size="10.5" font-family="monospace">-2147023436</text>
+  <text x="230" y="828" fill="#555" font-size="10.5" font-family="monospace">0x800705B4</text>
+  <text x="350" y="828" fill="#555" font-size="10.5">Operation timed out</text>
+  <text x="600" y="828" fill="#b71c1c" font-size="10.5">Restart BITS service, clear SoftwareDistribution folder, check proxy/connectivity</text>
+
+  <!-- Row 5 -->
+  <line x1="55" y1="848" x2="1295" y2="848" stroke="#eee" stroke-width="1" />
+  <text x="60" y="865" fill="#555" font-size="10.5" font-family="monospace">-2145107951</text>
+  <text x="230" y="865" fill="#555" font-size="10.5" font-family="monospace">0x80245011</text>
+  <text x="350" y="865" fill="#555" font-size="10.5">WUServer policy missing</text>
+  <text x="600" y="865" fill="#b71c1c" font-size="10.5">gpupdate /force, verify HKLM\...\WindowsUpdate reg keys, restart wuauserv</text>
+
+  <!-- Row 6 -->
+  <line x1="55" y1="885" x2="1295" y2="885" stroke="#eee" stroke-width="1" />
+  <text x="60" y="902" fill="#555" font-size="10.5" font-family="monospace">-2147012886</text>
+  <text x="230" y="902" fill="#555" font-size="10.5" font-family="monospace">0x80072EEF</text>
+  <text x="350" y="902" fill="#555" font-size="10.5">DNS resolution failure</text>
+  <text x="600" y="902" fill="#b71c1c" font-size="10.5">ipconfig /flushdns, ipconfig /registerdns, test Resolve-DnsName, set static DNS</text>
+
+  <!-- Row 7 -->
+  <line x1="55" y1="922" x2="1295" y2="922" stroke="#eee" stroke-width="1" />
+  <text x="60" y="939" fill="#555" font-size="10.5" font-family="monospace">-2147012855</text>
+  <text x="230" y="939" fill="#555" font-size="10.5" font-family="monospace">0x80072EE2</text>
+  <text x="350" y="939" fill="#555" font-size="10.5">Network timeout</text>
+  <text x="600" y="939" fill="#b71c1c" font-size="10.5">Restart-NetAdapter, netsh winsock reset, check firewall (outbound 443/80/8530)</text>
+
+  <!-- Row 8 -->
+  <line x1="55" y1="959" x2="1295" y2="959" stroke="#eee" stroke-width="1" />
+  <text x="60" y="976" fill="#555" font-size="10.5" font-family="monospace">-2147012867</text>
+  <text x="230" y="976" fill="#555" font-size="10.5" font-family="monospace">0x80072EFD</text>
+  <text x="350" y="976" fill="#555" font-size="10.5">Server connection failed</text>
+  <text x="600" y="976" fill="#b71c1c" font-size="10.5">Check WSUS URL in registry, verify firewall, restart wuauserv, reset proxy</text>
+
+  <!-- Row 9 -->
+  <line x1="55" y1="996" x2="1295" y2="996" stroke="#eee" stroke-width="1" />
+  <text x="60" y="1013" fill="#555" font-size="10.5" font-family="monospace">-2145124320</text>
+  <text x="230" y="1013" fill="#555" font-size="10.5" font-family="monospace">0x80280020</text>
+  <text x="350" y="1013" fill="#555" font-size="10.5">No interactive user</text>
+  <text x="600" y="1013" fill="#b71c1c" font-size="10.5">Transient retry; ensure AC power, disable sleep: powercfg /change standby-timeout-ac 0</text>
+
+  <!-- Row 10 -->
+  <line x1="55" y1="1033" x2="1295" y2="1033" stroke="#eee" stroke-width="1" />
+  <text x="60" y="1050" fill="#555" font-size="10.5" font-family="monospace">-2145124341</text>
+  <text x="230" y="1050" fill="#555" font-size="10.5" font-family="monospace">0x80280013</text>
+  <text x="350" y="1050" fill="#555" font-size="10.5">Operation cancelled</text>
+  <text x="600" y="1050" fill="#b71c1c" font-size="10.5">Clear WU cache (Stop wuauserv, rm SoftwareDistribution), resync: wuauclt /resetauthorization</text>
+
+  <!-- Row 11 -->
+  <line x1="55" y1="1070" x2="1295" y2="1070" stroke="#eee" stroke-width="1" />
+  <text x="60" y="1087" fill="#555" font-size="10.5" font-family="monospace">-2147467259</text>
+  <text x="230" y="1087" fill="#555" font-size="10.5" font-family="monospace">0x80004005</text>
+  <text x="350" y="1087" fill="#555" font-size="10.5">Unspecified error</text>
+  <text x="600" y="1087" fill="#b71c1c" font-size="10.5">Run DISM /RestoreHealth, check event logs, re-register WU DLLs, retry</text>
+
+  <!-- Row 12 -->
+  <line x1="55" y1="1107" x2="1295" y2="1107" stroke="#eee" stroke-width="1" />
+  <text x="60" y="1124" fill="#555" font-size="10.5" font-family="monospace">-2147467260</text>
+  <text x="230" y="1124" fill="#555" font-size="10.5" font-family="monospace">0x80004004</text>
+  <text x="350" y="1124" fill="#555" font-size="10.5">Operation aborted</text>
+  <text x="600" y="1124" fill="#b71c1c" font-size="10.5">Clear pending.xml, re-register WU DLLs, wuauclt /detectnow with retry loop</text>
+
+  <!-- Row 13 -->
+  <line x1="55" y1="1144" x2="1295" y2="1144" stroke="#eee" stroke-width="1" />
+  <text x="60" y="1161" fill="#555" font-size="10.5" font-family="monospace">-2016409844</text>
+  <text x="230" y="1161" fill="#555" font-size="10.5" font-family="monospace">0x878A0018</text>
+  <text x="350" y="1161" fill="#555" font-size="10.5">Update execution timeout</text>
+  <text x="600" y="1161" fill="#b71c1c" font-size="10.5">Increase deadline in Intune/SCCM, check for hung msiexec, kill stale installers</text>
+
+  <!-- Row 14 -->
+  <line x1="55" y1="1181" x2="1295" y2="1181" stroke="#eee" stroke-width="1" />
+  <text x="60" y="1198" fill="#555" font-size="10.5" font-family="monospace">-2147024891</text>
+  <text x="230" y="1198" fill="#555" font-size="10.5" font-family="monospace">0x80070008</text>
+  <text x="350" y="1198" fill="#555" font-size="10.5">Not enough memory</text>
+  <text x="600" y="1198" fill="#b71c1c" font-size="10.5">Close non-essential processes, increase page file, restart services, reboot</text>
+
+  <!-- Row 15 -->
+  <line x1="55" y1="1218" x2="1295" y2="1218" stroke="#eee" stroke-width="1" />
+  <text x="60" y="1235" fill="#555" font-size="10.5" font-family="monospace">-2016409966</text>
+  <text x="230" y="1235" fill="#555" font-size="10.5" font-family="monospace">0x878A002A</text>
+  <text x="350" y="1235" fill="#555" font-size="10.5">Group policy conflict</text>
+  <text x="600" y="1235" fill="#b71c1c" font-size="10.5">gpresult /h report.html, ensure single update source (GPO or Intune or SCCM, never mixed)</text>
+
+  <!-- Row 16 -->
+  <line x1="55" y1="1255" x2="1295" y2="1255" stroke="#eee" stroke-width="1" />
+  <text x="60" y="1272" fill="#555" font-size="10.5" font-family="monospace">-2145124305</text>
+  <text x="230" y="1272" fill="#555" font-size="10.5" font-family="monospace">0x8028001F</text>
+  <text x="350" y="1272" fill="#555" font-size="10.5">Download failed</text>
+  <text x="600" y="1272" fill="#b71c1c" font-size="10.5">Check disk space, restart BITS, clear Downloader cache, verify network connectivity</text>
+
+  <!-- Row 17 -->
+  <line x1="55" y1="1292" x2="1295" y2="1292" stroke="#eee" stroke-width="1" />
+  <text x="60" y="1309" fill="#555" font-size="10.5" font-family="monospace">-2146777998</text>
+  <text x="230" y="1309" fill="#555" font-size="10.5" font-family="monospace">0x8024044E</text>
+  <text x="350" y="1309" fill="#555" font-size="10.5">WU registry corrupt</text>
+  <text x="600" y="1309" fill="#b71c1c" font-size="10.5">Reset WU registry keys, re-register wuapi.dll / wups.dll / wuwebv.dll</text>
+
+  <!-- Row 18 -->
+  <line x1="55" y1="1329" x2="1295" y2="1329" stroke="#eee" stroke-width="1" />
+  <text x="60" y="1346" fill="#555" font-size="10.5" font-family="monospace">-2147023890</text>
+  <text x="230" y="1346" fill="#555" font-size="10.5" font-family="monospace">0x80070570</text>
+  <text x="350" y="1346" fill="#555" font-size="10.5">Corrupted file or disk</text>
+  <text x="600" y="1346" fill="#b71c1c" font-size="10.5">Schedule chkdsk C: /f /r at next reboot, then retry updates</text>
+
+  <!-- Row 19 -->
+  <line x1="55" y1="1366" x2="1295" y2="1366" stroke="#eee" stroke-width="1" />
+  <text x="60" y="1383" fill="#555" font-size="10.5" font-family="monospace">-2147010815</text>
+  <text x="230" y="1383" fill="#555" font-size="10.5" font-family="monospace">0x80073701</text>
+  <text x="350" y="1383" fill="#555" font-size="10.5">Assembly not found</text>
+  <text x="600" y="1383" fill="#b71c1c" font-size="10.5">DISM /RestoreHealth, if .NET: dism /enable-feature /featurename:NetFx3, reinstall .NET</text>
+
+  <!-- Row 20 -->
+  <line x1="55" y1="1403" x2="1295" y2="1403" stroke="#eee" stroke-width="1" />
+  <text x="60" y="1370" fill="#555" font-size="10.5" font-family="monospace">-2147024809</text>
+  <text x="230" y="1370" fill="#555" font-size="10.5" font-family="monospace">0x80070057</text>
+  <text x="350" y="1370" fill="#555" font-size="10.5">Bad parameter / corrupt metadata</text>
+  <text x="600" y="1370" fill="#b71c1c" font-size="10.5">Re-register WU DLLs (wuapi, wuwebv, wups, wups2), clear SoftwareDistribution, reset auth</text>
+</svg>
