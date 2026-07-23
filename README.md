@@ -1,36 +1,67 @@
-# Intune Proactive Remediation Templates
+# Intune Patch & App Remediation Pipeline
 
-## How Proactive Remediations Work
+Automated detection, grouping, and remediation of **Windows Update** and **App installation** failures across your Intune-managed devices.
 
-| Script exit code | Status                    |
-|------------------|---------------------------|
-| 0                | Compliant (no action)     |
-| 1 (or non-zero)  | Non-compliant (remediate) |
+## Architecture
 
-## Deployment in Intune
+```
+Azure Automation (scheduled daily)
+    │
+    ├── Graph API: windowsUpdateStates (patch failures)
+    │   └── Group by errorCode → AAD groups: Intune-PatchError-{code}
+    │
+    ├── Graph API: mobileApps/{id}/deviceStatuses (app failures)
+    │   └── Group by errorCode → AAD groups: Intune-AppError-{code}
+    │
+    └── Intune Proactive Remediations → targeted at each group
+```
 
-1. Go to **Endpoint Manager > Devices > Scripts and remediations**
-2. Click **Create > Proactive Remediation**
-3. Fill in Name/Description
-4. **Detection script**: Upload `DetectionTemplate.ps1`
-5. **Remediation script**: Upload `RemediationTemplate.ps1`
-6. Set **Run this script using the logged on credentials** (usually No for system context)
-7. Schedule **Frequency** and **Grace period**
-8. Assign to device groups
+## Files
 
-## Customizing
+### Shared Infrastructure
+| File | Purpose |
+|---|---|
+| `IntuneUpdateErrorGroups.ps1` | Azure Automation runbook for patch errors |
+| `IntuneUpdateErrorGroups-Local.ps1` | Local test version for patch errors |
+| `App\IntuneAppErrorGroups.ps1` | Azure Automation runbook for app errors |
+| `App\IntuneAppErrorGroups-Local.ps1` | Local test version for app errors |
+| `AZURE-AUTOMATION-SETUP.md` | Setup guide for Azure Automation + Graph permissions |
 
-Edit the section between `--- CUSTOM DETECTION LOGIC ---` and `--- END CUSTOM LOGIC ---` in both scripts.
+### Patch Remediation (Windows Updates)
+| File | Purpose |
+|---|---|
+| `DetectionTemplate.ps1` | Scans for 20 patch error conditions. Exit 0=compliant, 1=needs fix |
+| `RemediationTemplate.ps1` | Switch-based remediation for all patch error codes |
+| `ERROR-REFERENCE.md` | Full error code + remediation reference for patches |
 
-### Common detection patterns:
+### App Remediation (Win32/MSI/Store Apps)
+| File | Purpose |
+|---|---|
+| `App\DetectionTemplate.ps1` | Scans for common app install blockers |
+| `App\RemediationTemplate.ps1` | Targeted remediation for app install errors |
+| `App\ERROR-REFERENCE.md` | Full error code + remediation reference for apps |
 
-- **Registry check**: `Get-ItemProperty -Path "HKLM:\SOFTWARE\..." -Name "Version" -ErrorAction SilentlyContinue`
-- **File version**: `(Get-Item "C:\Program Files\...\app.exe").VersionInfo.FileVersion`
-- **Service state**: `Get-Service "wuauserv" | Select-Object -ExpandProperty Status`
-- **WMI query**: `Get-CimInstance -ClassName Win32_QuickFixEngineering`
+### Poster
+| File | Purpose |
+|---|---|
+| `poster.svg` | Full pipeline diagram + all error codes with remediations |
 
-### Remediation notes
+## Quick Start
 
-- Scripts run as **SYSTEM** by default (no user interaction)
-- Use `start-process -WindowStyle Hidden` for silent installers
-- Logging goes to `%TEMP%\IntuneDetection.log` / `IntuneRemediation.log`
+```powershell
+# 1. Test locally
+.\IntuneUpdateErrorGroups-Local.ps1
+
+# 2. Or for apps
+.\App\IntuneAppErrorGroups-Local.ps1
+
+# 3. Deploy detection/remediation scripts in Intune
+#    as Proactive Remediations targeting the created AAD groups
+```
+
+## Proactive Remediation Contract
+
+| Exit code | Status |
+|---|---|
+| 0 | Compliant (no action) |
+| 1 | Non-compliant (remediation runs) |
