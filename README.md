@@ -41,10 +41,11 @@ Azure Automation (scheduled daily)
 | `App\RemediationTemplate.ps1` | Targeted remediation for app install errors |
 | `App\ERROR-REFERENCE.md` | Full error code + remediation reference for apps |
 
-### Poster
+### Diagrams
 | File | Purpose |
 |---|---|
 | `poster.svg` | Full pipeline diagram + all error codes with remediations |
+| `Workflow-Animated.svg` | Animated pipeline flow chart (open in a browser): moving data packets, flowing arrows, sequential step highlighting |
 
 ## Quick Start
 

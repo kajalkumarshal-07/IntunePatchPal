@@ -1,0 +1,280 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 960" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#1a237e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#283593;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="boxBlue" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1565c0;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1976d2;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="boxGreen" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#2e7d32;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#388e3c;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="boxOrange" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#e65100;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ef6c00;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="boxRed" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#b71c1c;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#c62828;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="boxPurple" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#4a148c;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#6a1b9a;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="boxTeal" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#00695c;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#00796b;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow" x="-8%" y="-8%" width="120%" height="120%">
+      <feDropShadow dx="2" dy="3" stdDeviation="4" flood-opacity="0.25"/>
+    </filter>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3" />
+    </filter>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#e3e8ee" stroke-width="1" />
+    </pattern>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#90a4ae" />
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1400" height="960" fill="#f5f7fa" />
+  <rect width="1400" height="960" fill="url(#grid)" />
+
+  <!-- Header -->
+  <rect x="0" y="0" width="1400" height="90" fill="url(#headerGrad)" />
+  <rect x="-150" y="0" width="140" height="90" fill="#ffffff" opacity="0.06">
+    <animate attributeName="x" values="-150;1420" dur="4.5s" repeatCount="indefinite" />
+  </rect>
+  <rect x="60" y="84" width="0" height="3" fill="#64b5f6">
+    <animate attributeName="width" from="0" to="1280" dur="2.5s" fill="freeze" />
+  </rect>
+  <text x="60" y="48" fill="#ffffff" font-size="30" font-weight="700">Intune Patch &amp; App Remediation &#8212; Animated Workflow</text>
+  <text x="60" y="72" fill="#b0bec5" font-size="13.5">Daily automation finds failing devices &#8594; groups them by error code &#8594; runs targeted fixes via Proactive Remediations</text>
+
+  <circle cx="1195" cy="45" r="9" fill="#4caf50">
+    <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite" />
+  </circle>
+  <text x="1211" y="50" fill="#a5d6a7" font-size="12.5" font-weight="700">AUTOMATION ACTIVE</text>
+
+  <!-- ============ ROW 1 ============ -->
+
+  <!-- Box A: Azure Automation Runbook -->
+  <g opacity="0">
+    <animate attributeName="opacity" to="1" dur="0.5s" fill="freeze" begin="0.2s" />
+    <rect x="60" y="130" width="380" height="170" rx="12" fill="url(#boxPurple)" filter="url(#shadow)" />
+    <circle cx="88" cy="158" r="14" fill="#ffffff" opacity="0.15" />
+    <text x="88" y="163" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="700">1</text>
+    <text x="112" y="163" fill="#fff" font-size="16" font-weight="700">Azure Automation Runbook</text>
+    <text x="80" y="183" fill="#e1bee7" font-size="11">Daily 06:00 &#8226; Managed Identity</text>
+    <text x="80" y="207" fill="#fff" font-size="11.5" font-family="Consolas, monospace">Connect-MgGraph -Identity</text>
+    <text x="80" y="225" fill="#fff" font-size="11.5" font-family="Consolas, monospace">GET .../windowsUpdateStates</text>
+    <text x="80" y="243" fill="#fff" font-size="11.5" font-family="Consolas, monospace">GET .../mobileApps/{id}/deviceStatuses</text>
+    <text x="80" y="261" fill="#fff" font-size="11">Collects failed patch + app installs</text>
+    <rect x="60" y="130" width="380" height="170" rx="12" fill="#ffffff">
+      <animate attributeName="opacity" values="0;0.3;0" dur="1.6s" repeatCount="indefinite" begin="2.0s" />
+    </rect>
+  </g>
+
+  <!-- Arrow A->B -->
+  <path id="p1" d="M 440 215 L 472 215" stroke="#90a4ae" stroke-width="2.5" fill="none" marker-end="url(#arr)" />
+  <path d="M 440 215 L 470 215" stroke="#29b6f6" stroke-width="2.5" stroke-dasharray="9 7" fill="none">
+    <animate attributeName="stroke-dashoffset" from="0" to="-32" dur="1.6s" repeatCount="indefinite" />
+  </path>
+  <circle r="6" fill="#ce93d8" filter="url(#glow)">
+    <animateMotion dur="1.2s" repeatCount="indefinite" begin="2.4s" rotate="auto">
+      <mpath href="#p1" />
+    </animateMotion>
+    <animate attributeName="opacity" values="1;1;0" keyTimes="0;0.8;1" dur="1.2s" repeatCount="indefinite" begin="2.4s" />
+  </circle>
+
+  <!-- Box B: Microsoft Graph API -->
+  <g opacity="0">
+    <animate attributeName="opacity" to="1" dur="0.5s" fill="freeze" begin="1.0s" />
+    <rect x="480" y="130" width="370" height="170" rx="12" fill="url(#boxBlue)" filter="url(#shadow)" />
+    <circle cx="508" cy="158" r="14" fill="#ffffff" opacity="0.15" />
+    <text x="508" y="163" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="700">2</text>
+    <text x="532" y="163" fill="#fff" font-size="16" font-weight="700">Microsoft Graph API</text>
+    <text x="500" y="183" fill="#90caf9" font-size="11">Queries device install states</text>
+    <text x="500" y="207" fill="#fff" font-size="11.5" font-family="Consolas, monospace">Patch: windowsUpdateStates</text>
+    <text x="500" y="225" fill="#fff" font-size="11.5" font-family="Consolas, monospace">  status='failed' &#8594; errorCode</text>
+    <text x="500" y="243" fill="#fff" font-size="11.5" font-family="Consolas, monospace">App: mobileApps deviceStatuses</text>
+    <text x="500" y="261" fill="#fff" font-size="11.5" font-family="Consolas, monospace">  installState='failed' &#8594; errorCode</text>
+    <rect x="480" y="130" width="370" height="170" rx="12" fill="#ffffff">
+      <animate attributeName="opacity" values="0;0.3;0" dur="1.6s" repeatCount="indefinite" begin="3.4s" />
+    </rect>
+  </g>
+
+  <!-- Arrow B->C -->
+  <path id="p2" d="M 850 215 L 882 215" stroke="#90a4ae" stroke-width="2.5" fill="none" marker-end="url(#arr)" />
+  <path d="M 850 215 L 880 215" stroke="#29b6f6" stroke-width="2.5" stroke-dasharray="9 7" fill="none">
+    <animate attributeName="stroke-dashoffset" from="0" to="-32" dur="1.6s" repeatCount="indefinite" />
+  </path>
+  <circle r="6" fill="#90caf9" filter="url(#glow)">
+    <animateMotion dur="1.2s" repeatCount="indefinite" begin="3.8s" rotate="auto">
+      <mpath href="#p2" />
+    </animateMotion>
+    <animate attributeName="opacity" values="1;1;0" keyTimes="0;0.8;1" dur="1.2s" repeatCount="indefinite" begin="3.8s" />
+  </circle>
+  <rect x="852" y="176" width="70" height="18" rx="9" fill="#ffffff" stroke="#cfd8dc" stroke-width="1" />
+  <text x="861" y="189" fill="#455a64" font-size="10">errorCode</text>
+
+  <!-- Box C: Group by Error Code -->
+  <g opacity="0">
+    <animate attributeName="opacity" to="1" dur="0.5s" fill="freeze" begin="1.8s" />
+    <rect x="890" y="130" width="450" height="170" rx="12" fill="url(#boxTeal)" filter="url(#shadow)" />
+    <circle cx="918" cy="158" r="14" fill="#ffffff" opacity="0.15" />
+    <text x="918" y="163" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="700">3</text>
+    <text x="942" y="163" fill="#fff" font-size="16" font-weight="700">Group by Error Code</text>
+    <text x="910" y="183" fill="#80cbc4" font-size="11">Group-Object errorCode</text>
+    <text x="910" y="207" fill="#fff" font-size="11.5" font-family="Consolas, monospace">$failedStates | Group-Object errorCode</text>
+    <text x="910" y="225" fill="#fff" font-size="11.5" font-family="Consolas, monospace">Intune-PatchError-{errorCode}</text>
+    <text x="910" y="243" fill="#fff" font-size="11.5" font-family="Consolas, monospace">Intune-AppError-{errorCode}</text>
+    <text x="910" y="261" fill="#fff" font-size="11.5">Sync device members &#8226; purge orphaned groups</text>
+    <rect x="890" y="130" width="450" height="170" rx="12" fill="#ffffff">
+      <animate attributeName="opacity" values="0;0.3;0" dur="1.6s" repeatCount="indefinite" begin="4.8s" />
+    </rect>
+  </g>
+
+  <!-- Arrow C->D (elbow) -->
+  <path id="p3" d="M 1115 300 L 1115 455 L 924 455" stroke="#90a4ae" stroke-width="2.5" fill="none" marker-end="url(#arr)" />
+  <path d="M 1115 300 L 1115 455 L 922 455" stroke="#29b6f6" stroke-width="2.5" stroke-dasharray="9 7" fill="none">
+    <animate attributeName="stroke-dashoffset" from="0" to="-32" dur="1.6s" repeatCount="indefinite" />
+  </path>
+  <circle r="6" fill="#4dd0e1" filter="url(#glow)">
+    <animateMotion dur="1.4s" repeatCount="indefinite" begin="5.2s" rotate="auto">
+      <mpath href="#p3" />
+    </animateMotion>
+    <animate attributeName="opacity" values="1;1;0" keyTimes="0;0.8;1" dur="1.4s" repeatCount="indefinite" begin="5.2s" />
+  </circle>
+  <rect x="1123" y="352" width="181" height="18" rx="9" fill="#ffffff" stroke="#cfd8dc" stroke-width="1" />
+  <text x="1131" y="365" fill="#455a64" font-size="10">one group per errorCode</text>
+
+  <!-- ============ ROW 2 ============ -->
+
+  <!-- Box D: AAD Security Groups -->
+  <g opacity="0">
+    <animate attributeName="opacity" to="1" dur="0.5s" fill="freeze" begin="2.6s" />
+    <rect x="480" y="370" width="440" height="170" rx="12" fill="url(#boxOrange)" filter="url(#shadow)" />
+    <circle cx="508" cy="398" r="14" fill="#ffffff" opacity="0.15" />
+    <text x="508" y="403" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="700">4</text>
+    <text x="532" y="403" fill="#fff" font-size="16" font-weight="700">AAD Security Groups</text>
+    <text x="500" y="423" fill="#ffe0b2" font-size="11">One group per error code &#8226; targets Proactive Remediations</text>
+    <text x="500" y="447" fill="#fff" font-size="11.5" font-family="Consolas, monospace">Intune-PatchError--2147024784 (disk space)</text>
+    <text x="500" y="465" fill="#fff" font-size="11.5" font-family="Consolas, monospace">Intune-AppError-1603  (fatal install)</text>
+    <text x="500" y="483" fill="#fff" font-size="11.5">Members = devices with that failure</text>
+    <text x="500" y="501" fill="#fff" font-size="11.5">Auto-synced daily &#8226; orphan groups purged</text>
+    <rect x="480" y="370" width="440" height="170" rx="12" fill="#ffffff">
+      <animate attributeName="opacity" values="0;0.3;0" dur="1.6s" repeatCount="indefinite" begin="6.2s" />
+    </rect>
+  </g>
+
+  <!-- Arrow D->E -->
+  <path id="p4" d="M 650 540 L 650 574" stroke="#90a4ae" stroke-width="2.5" fill="none" marker-end="url(#arr)" />
+  <path d="M 650 540 L 650 572" stroke="#29b6f6" stroke-width="2.5" stroke-dasharray="9 7" fill="none">
+    <animate attributeName="stroke-dashoffset" from="0" to="-32" dur="1.6s" repeatCount="indefinite" />
+  </path>
+  <circle r="6" fill="#ffcc80" filter="url(#glow)">
+    <animateMotion dur="1.2s" repeatCount="indefinite" begin="6.6s" rotate="auto">
+      <mpath href="#p4" />
+    </animateMotion>
+    <animate attributeName="opacity" values="1;1;0" keyTimes="0;0.8;1" dur="1.2s" repeatCount="indefinite" begin="6.6s" />
+  </circle>
+  <rect x="658" y="548" width="202" height="18" rx="9" fill="#ffffff" stroke="#cfd8dc" stroke-width="1" />
+  <text x="666" y="561" fill="#455a64" font-size="10">assigns Proactive Remediations</text>
+
+  <!-- ============ ROW 3 ============ -->
+
+  <!-- Diamond E: Detection Script -->
+  <g opacity="0">
+    <animate attributeName="opacity" to="1" dur="0.5s" fill="freeze" begin="3.4s" />
+    <path d="M 650 580 L 790 660 L 650 740 L 510 660 Z" fill="#303f9f" filter="url(#shadow)" />
+    <text x="650" y="638" text-anchor="middle" fill="#fff" font-size="15" font-weight="700">5 &#183; Detection Script</text>
+    <text x="650" y="658" text-anchor="middle" fill="#c5cae9" font-size="11">Checks the error condition</text>
+    <text x="650" y="674" text-anchor="middle" fill="#a5d6a7" font-size="10.5">exit 0 = compliant</text>
+    <text x="650" y="690" text-anchor="middle" fill="#ef9a9a" font-size="10.5">exit 1 = needs fix</text>
+    <path d="M 650 580 L 790 660 L 650 740 L 510 660 Z" fill="#ffffff">
+      <animate attributeName="opacity" values="0;0.35;0" dur="1.6s" repeatCount="indefinite" begin="7.6s" />
+    </path>
+  </g>
+
+  <!-- Arrow E->G (exit 0) -->
+  <path id="p5" d="M 510 660 L 424 660" stroke="#90a4ae" stroke-width="2.5" fill="none" marker-end="url(#arr)" />
+  <path d="M 510 660 L 422 660" stroke="#29b6f6" stroke-width="2.5" stroke-dasharray="9 7" fill="none">
+    <animate attributeName="stroke-dashoffset" from="0" to="-32" dur="1.6s" repeatCount="indefinite" />
+  </path>
+  <circle r="6" fill="#a5d6a7" filter="url(#glow)">
+    <animateMotion dur="1.2s" repeatCount="indefinite" begin="8.0s" rotate="auto">
+      <mpath href="#p5" />
+    </animateMotion>
+    <animate attributeName="opacity" values="1;1;0" keyTimes="0;0.8;1" dur="1.2s" repeatCount="indefinite" begin="8.0s" />
+  </circle>
+  <rect x="432" y="628" width="52" height="18" rx="9" fill="#e8f5e9" stroke="#a5d6a7" stroke-width="1" />
+  <text x="441" y="641" fill="#2e7d32" font-size="10" font-weight="700">exit 0</text>
+
+  <!-- Box G: Compliant -->
+  <g opacity="0">
+    <animate attributeName="opacity" to="1" dur="0.5s" fill="freeze" begin="5.0s" />
+    <rect x="120" y="620" width="300" height="80" rx="12" fill="url(#boxGreen)" filter="url(#shadow)" />
+    <text x="270" y="652" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">Exit 0 &#8212; Compliant</text>
+    <text x="270" y="672" text-anchor="middle" fill="#fff" font-size="11">Device is healthy &#8212; no action needed</text>
+    <text x="270" y="688" text-anchor="middle" fill="#c8e6c9" font-size="10.5">Re-evaluated on next scheduled run</text>
+    <rect x="120" y="620" width="300" height="80" rx="12" fill="#ffffff">
+      <animate attributeName="opacity" values="0;0.3;0" dur="1.6s" repeatCount="indefinite" begin="10.4s" />
+    </rect>
+  </g>
+
+  <!-- Arrow E->F (exit 1) -->
+  <path id="p6" d="M 650 740 L 650 754" stroke="#90a4ae" stroke-width="2.5" fill="none" marker-end="url(#arr)" />
+  <path d="M 650 740 L 650 752" stroke="#29b6f6" stroke-width="2.5" stroke-dasharray="9 7" fill="none">
+    <animate attributeName="stroke-dashoffset" from="0" to="-32" dur="1.6s" repeatCount="indefinite" />
+  </path>
+  <circle r="6" fill="#ef9a9a" filter="url(#glow)">
+    <animateMotion dur="1.2s" repeatCount="indefinite" begin="9.4s" rotate="auto">
+      <mpath href="#p6" />
+    </animateMotion>
+    <animate attributeName="opacity" values="1;1;0" keyTimes="0;0.8;1" dur="1.2s" repeatCount="indefinite" begin="9.4s" />
+  </circle>
+  <rect x="658" y="716" width="52" height="18" rx="9" fill="#ffebee" stroke="#ef9a9a" stroke-width="1" />
+  <text x="667" y="729" fill="#c62828" font-size="10" font-weight="700">exit 1</text>
+
+  <!-- Box F: Remediation Script -->
+  <g opacity="0">
+    <animate attributeName="opacity" to="1" dur="0.5s" fill="freeze" begin="4.2s" />
+    <rect x="510" y="760" width="280" height="120" rx="12" fill="url(#boxRed)" filter="url(#shadow)" />
+    <circle cx="538" cy="788" r="14" fill="#ffffff" opacity="0.15" />
+    <text x="538" y="793" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="700">6</text>
+    <text x="562" y="793" fill="#fff" font-size="14" font-weight="700">Remediation Script</text>
+    <text x="530" y="817" fill="#fff" font-size="11">Targeted fix for the error code</text>
+    <text x="530" y="835" fill="#fff" font-size="11">DISM &#8226; SFC &#8226; cleanmgr &#8226; services</text>
+    <text x="530" y="853" fill="#fff" font-size="11">WU cache reset &#8226; registry &#8226; DNS</text>
+    <rect x="510" y="760" width="280" height="120" rx="12" fill="#ffffff">
+      <animate attributeName="opacity" values="0;0.3;0" dur="1.6s" repeatCount="indefinite" begin="9.0s" />
+    </rect>
+  </g>
+
+  <!-- Loop arrow F->E (re-detect) -->
+  <path id="p7" d="M 790 820 L 860 820 L 860 660 L 794 660" stroke="#90a4ae" stroke-width="2.5" fill="none" marker-end="url(#arr)" />
+  <path d="M 790 820 L 860 820 L 860 660 L 796 660" stroke="#ffa726" stroke-width="2.5" stroke-dasharray="9 7" fill="none">
+    <animate attributeName="stroke-dashoffset" from="0" to="-32" dur="1.6s" repeatCount="indefinite" />
+  </path>
+  <circle r="6" fill="#ffa726" filter="url(#glow)">
+    <animateMotion dur="1.5s" repeatCount="indefinite" begin="10.8s" rotate="auto">
+      <mpath href="#p7" />
+    </animateMotion>
+    <animate attributeName="opacity" values="1;1;0" keyTimes="0;0.8;1" dur="1.5s" repeatCount="indefinite" begin="10.8s" />
+  </circle>
+  <rect x="862" y="622" width="136" height="18" rx="9" fill="#fff3e0" stroke="#ffcc80" stroke-width="1" />
+  <text x="871" y="635" fill="#e65100" font-size="10" font-weight="700">re-detect next run</text>
+
+  <!-- Footer -->
+  <rect x="60" y="912" width="1280" height="36" rx="8" fill="#37474f" />
+  <text x="700" y="936" text-anchor="middle" fill="#b0bec5" font-size="12">
+    Daily cycle: detect &#8594; group &#8594; remediate &#8226; 19 patch + 18 app error codes &#8226; Exit 0 = compliant / Exit 1 = needs fix &#8226; Proactive Remediations run as SYSTEM
+  </text>
+</svg>
