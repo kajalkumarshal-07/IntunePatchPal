@@ -2,12 +2,18 @@
 
 ## Detection Script Template
 
-Use this detection logic in your Proactive Remediation detection script:
+`DetectionTemplate.ps1` ships with the logic for every code below:
 
 ```powershell
-$errorCode = (Get-CimInstance -ClassName Win32_QuickFixEngineering | ...).ReturnValue
-# or check WindowsUpdate.log / CBS.log for specific error patterns
+# full scan (fast, runs every cycle): pending reboot, disk, memory,
+#   BITS, partial WSUS policy - DISM only with -IncludeSlowChecks
+.\DetectionTemplate.ps1
+# targeted scan (group assignment context): the code Intune reported
+.\DetectionTemplate.ps1 -TargetErrorCode '-2147010798'
 ```
+
+Exit 0 = compliant, exit 1 = run remediation. Detection errors exit 0 by
+default (`-Strict` to change) so a broken detection cannot trigger remediation.
 
 ## Error Code Reference
 
@@ -15,9 +21,9 @@ $errorCode = (Get-CimInstance -ClassName Win32_QuickFixEngineering | ...).Return
 
 | Error Code | Hex | Description | Detection | Remediation Script |
 |---|---|---|---|---|
-| `-2147024784` | `0x80070070` | Not enough disk space | `Get-CimInstance Win32_LogicalDisk -Filter "DriveType=3" \| Where-Object { $_.FreeSpace -lt 5GB }` | `cleanmgr /sageset:1` then `cleanmgr /sagerun:1`, remove temp files: `Get-ChildItem "$env:TEMP" -Recurse \| Remove-Item -Force`, clean WinSxS: `DISM /Online /Cleanup-Image /StartComponentCleanup /ResetBase` |
-| `-2147024891` | `0x80070008` | Not enough memory | Check available RAM: `(Get-CimInstance Win32_OperatingSystem).FreePhysicalMemory` | Close non-essential services, increase page file: `wmic computersystem set AutomaticManagedPagefile=False` then set custom size. Reboot if needed. |
-| `-2147023890` | `0x80070570` | Corrupted file/disk | `chkdsk /f` required | Schedule `chkdsk C: /f /r`, reboot to run. Then retry updates. |
+| `-2147024784` | `0x80070070` | Not enough disk space | `Get-CimInstance Win32_LogicalDisk -Filter "DriveType=3" \| Where-Object { $_.FreeSpace -lt 5GB }` | Remove temp/WU-download files older than 24h, then `DISM /Online /Cleanup-Image /StartComponentCleanup` (never `/ResetBase` - it permanently blocks update uninstalls). `RemediationTemplate.ps1` verifies free space after cleanup. |
+| `-2147024891` | `0x80070008` | Not enough memory | Free physical RAM under 256 MB (`(Get-CimInstance Win32_OperatingSystem).FreePhysicalMemory -lt 262144`) | Report-only: top memory consumers + pagefile mode are written to the Intune report. Running services are never stopped for this. |
+| `-2147023890` | `0x80070570` | Corrupted file/disk | `Win32_Volume.DirtyBitSet` for C: | Read-only `Repair-Volume -Scan` by default. `chkdsk C: /f` (never `/r`) is only scheduled when the script is deployed with `-AllowChkdsk`. |
 
 ### Component Store & System Corruption
 
