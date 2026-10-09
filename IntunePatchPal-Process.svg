@@ -1,0 +1,174 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1080" viewBox="0 0 1600 1080" font-family="Segoe UI, Calibri, sans-serif">
+  <defs>
+    <marker id="arrowBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#0078D4"/>
+    </marker>
+    <marker id="arrowUp" viewBox="0 0 10 10" refX="5" refY="9" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,10 L5,0 L10,10 z" fill="#0078D4"/>
+    </marker>
+  </defs>
+
+  <!-- background -->
+  <rect x="0" y="0" width="1600" height="1080" fill="#FFFFFF"/>
+
+  <!-- header -->
+  <rect x="0" y="0" width="1600" height="100" fill="#1B3A5B"/>
+  <text x="40" y="50" font-size="34" font-weight="700" fill="#FFFFFF">IntunePatchPal</text>
+  <text x="40" y="82" font-size="18" fill="#9FC4E8">your fleet&#8217;s patch buddy &#8212; the automation process</text>
+  <text x="1560" y="44" font-size="15" text-anchor="end" fill="#9FC4E8">detects &#183; groups &#183; fixes &#183; tidies up</text>
+  <text x="1560" y="72" font-size="15" text-anchor="end" fill="#9FC4E8">Azure Automation &#183; Microsoft Graph &#183; Entra &#183; Intune Remediations</text>
+
+  <!-- ================= stage boxes ================= -->
+  <!-- box 1 : Device fails -->
+  <rect x="41" y="150" width="270" height="280" rx="10" fill="#EEF3FA" stroke="#C9D6E8" stroke-width="1.5"/>
+  <circle cx="71" cy="190" r="16" fill="#5B6B7C"/>
+  <text x="71" y="196" font-size="17" font-weight="700" text-anchor="middle" fill="#FFFFFF">1</text>
+  <text x="97" y="196" font-size="17" font-weight="700" fill="#5B6B7C">Device fails</text>
+  <text x="57" y="238" font-size="13.5" fill="#222E3B">
+    <tspan x="57" dy="0">Windows Update or app</tspan>
+    <tspan x="57" dy="21">install error on an</tspan>
+    <tspan x="57" dy="21">Intune-managed device.</tspan>
+    <tspan x="57" dy="32">Intune reports it on its</tspan>
+    <tspan x="57" dy="21">own &#8212; no agent, no</tspan>
+    <tspan x="57" dy="21">extra script needed.</tspan>
+  </text>
+
+  <!-- arrow 1->2 -->
+  <line x1="317" y1="290" x2="347" y2="290" stroke="#0078D4" stroke-width="3" marker-end="url(#arrowBlue)"/>
+
+  <!-- box 2 : Fetch reports -->
+  <rect x="353" y="150" width="270" height="280" rx="10" fill="#EEF3FA" stroke="#C9D6E8" stroke-width="1.5"/>
+  <circle cx="383" cy="190" r="16" fill="#0078D4"/>
+  <text x="383" y="196" font-size="17" font-weight="700" text-anchor="middle" fill="#FFFFFF">2</text>
+  <text x="409" y="196" font-size="17" font-weight="700" fill="#0078D4">Fetch reports</text>
+  <text x="369" y="238" font-size="13.5" fill="#222E3B">
+    <tspan x="369" dy="0">Every night at 06:00,</tspan>
+    <tspan x="369" dy="21">Azure Automation</tspan>
+    <tspan x="369" dy="21">runbooks POST Graph</tspan>
+    <tspan x="369" dy="21">reports: update-alert</tspan>
+    <tspan x="369" dy="21">+ app failure rows &#8212;</tspan>
+    <tspan x="369" dy="21">paged, retried, fail-loud.</tspan>
+  </text>
+
+  <!-- arrow 2->3 -->
+  <line x1="629" y1="290" x2="659" y2="290" stroke="#0078D4" stroke-width="3" marker-end="url(#arrowBlue)"/>
+
+  <!-- box 3 : Group devices -->
+  <rect x="665" y="150" width="270" height="280" rx="10" fill="#EEF3FA" stroke="#C9D6E8" stroke-width="1.5"/>
+  <circle cx="695" cy="190" r="16" fill="#0078D4"/>
+  <text x="695" y="196" font-size="17" font-weight="700" text-anchor="middle" fill="#FFFFFF">3</text>
+  <text x="721" y="196" font-size="17" font-weight="700" fill="#0078D4">Group devices</text>
+  <text x="681" y="238" font-size="13.5" fill="#222E3B">
+    <tspan x="681" dy="0">One Entra group per</tspan>
+    <tspan x="681" dy="21">error code &#8212;</tspan>
+    <tspan x="681" dy="21">Intune-PatchError-{code}.</tspan>
+    <tspan x="681" dy="32">The diff of failing</tspan>
+    <tspan x="681" dy="21">device IDs is applied</tspan>
+    <tspan x="681" dy="21">via $batch (add/remove).</tspan>
+  </text>
+
+  <!-- arrow 3->4 -->
+  <line x1="941" y1="290" x2="971" y2="290" stroke="#0078D4" stroke-width="3" marker-end="url(#arrowBlue)"/>
+
+  <!-- box 4 : Remediate -->
+  <rect x="977" y="150" width="270" height="280" rx="10" fill="#EEF3FA" stroke="#C9D6E8" stroke-width="1.5"/>
+  <circle cx="1007" cy="190" r="16" fill="#107C10"/>
+  <text x="1007" y="196" font-size="17" font-weight="700" text-anchor="middle" fill="#FFFFFF">4</text>
+  <text x="1033" y="196" font-size="17" font-weight="700" fill="#107C10">Remediate</text>
+  <text x="993" y="238" font-size="13.5" fill="#222E3B">
+    <tspan x="993" dy="0">Intune runs each code&#8217;s</tspan>
+    <tspan x="993" dy="21">detection on the group&#8217;s</tspan>
+    <tspan x="993" dy="21">members; failures get</tspan>
+    <tspan x="993" dy="21">the remediation as</tspan>
+    <tspan x="993" dy="21">SYSTEM &#8594; Verified |</tspan>
+    <tspan x="993" dy="21">Failed in the report.</tspan>
+  </text>
+
+  <!-- arrow 4->5 -->
+  <line x1="1253" y1="290" x2="1283" y2="290" stroke="#0078D4" stroke-width="3" marker-end="url(#arrowBlue)"/>
+
+  <!-- box 5 : Tidy up -->
+  <rect x="1289" y="150" width="270" height="280" rx="10" fill="#EEF3FA" stroke="#C9D6E8" stroke-width="1.5"/>
+  <circle cx="1319" cy="190" r="16" fill="#C43E1C"/>
+  <text x="1319" y="196" font-size="17" font-weight="700" text-anchor="middle" fill="#FFFFFF">5</text>
+  <text x="1345" y="196" font-size="17" font-weight="700" fill="#C43E1C">Tidy up</text>
+  <text x="1305" y="238" font-size="13.5" fill="#222E3B">
+    <tspan x="1305" dy="0">Fixed devices stop</tspan>
+    <tspan x="1305" dy="21">failing &#8594; the next sweep</tspan>
+    <tspan x="1305" dy="21">removes them from the</tspan>
+    <tspan x="1305" dy="21">group. Empty groups</tspan>
+    <tspan x="1305" dy="21">are cleared &#8212; the loop</tspan>
+    <tspan x="1305" dy="21">never goes stale.</tspan>
+  </text>
+
+  <!-- ================= lane brackets ================= -->
+  <rect x="41" y="452" width="270" height="40" rx="8" fill="#F1F3F5" stroke="#5B6B7C" stroke-width="1.5"/>
+  <text x="176" y="477" font-size="13" text-anchor="middle" fill="#5B6B7C">your fleet &#183; Entra-joined + MDM</text>
+
+  <rect x="353" y="452" width="582" height="40" rx="8" fill="#DCEAF8" stroke="#0078D4" stroke-width="1.5"/>
+  <text x="644" y="477" font-size="13.5" text-anchor="middle" fill="#005A9E">Azure Automation &#183; daily 06:00 &#183; managed identity &#183; Free SKU</text>
+
+  <rect x="977" y="452" width="270" height="40" rx="8" fill="#E3F3E3" stroke="#107C10" stroke-width="1.5"/>
+  <text x="1112" y="477" font-size="13" text-anchor="middle" fill="#107C10">Intune &#183; own schedule &#183; SYSTEM</text>
+
+  <rect x="1289" y="452" width="270" height="40" rx="8" fill="#FDF3E7" stroke="#C43E1C" stroke-width="1.5"/>
+  <text x="1424" y="477" font-size="13" text-anchor="middle" fill="#C43E1C">directory hygiene &#183; marker-guarded</text>
+
+  <!-- ================= closed loop arrow ================= -->
+  <path d="M 1424 500 V 555 H 489 V 512" fill="none" stroke="#0078D4" stroke-width="2.5" stroke-dasharray="9 7" marker-end="url(#arrowUp)"/>
+  <rect x="706" y="536" width="500" height="26" rx="13" fill="#FFFFFF"/>
+  <text x="956" y="554" font-size="14" text-anchor="middle" fill="#005A9E">closed loop &#8212; the group only holds devices failing right now</text>
+
+  <!-- ================= bottom cards ================= -->
+  <!-- card 1 -->
+  <rect x="40" y="620" width="490" height="270" rx="10" fill="#EEF3FA" stroke="#C9D6E8" stroke-width="1.5"/>
+  <text x="64" y="656" font-size="17" font-weight="700" fill="#0078D4">What you see</text>
+  <text x="64" y="692" font-size="13.5" fill="#222E3B">
+    <tspan x="64" dy="0">&#8226; Automation: jobs Completed + DRY RUN proof lines</tspan>
+    <tspan x="64" dy="30">&#8226; Entra: one group per code; size = live failures</tspan>
+    <tspan x="64" dy="30">&#8226; Intune: Verified|&#8230; / Failed|&#8230; per device, per code</tspan>
+    <tspan x="64" dy="30">&#8226; Group-size spike = something regressed in the field</tspan>
+    <tspan x="64" dy="30">&#8226; Alert rule: failed jobs reach email / Teams</tspan>
+  </text>
+
+  <!-- card 2 -->
+  <rect x="555" y="620" width="490" height="270" rx="10" fill="#EEF3FA" stroke="#C9D6E8" stroke-width="1.5"/>
+  <text x="579" y="656" font-size="17" font-weight="700" fill="#005A9E">Guardrails</text>
+  <text x="579" y="692" font-size="13.5" fill="#222E3B">
+    <tspan x="579" dy="0">&#8226; Only groups marked &#8216;Managed by automation&#8217; are written</tspan>
+    <tspan x="579" dy="30">&#8226; 409/404 = benign skips; real errors &#8594; job Failed &#8594; alert</tspan>
+    <tspan x="579" dy="30">&#8226; -DryRun previews every write; re-runs are idempotent</tspan>
+    <tspan x="579" dy="30">&#8226; Membership writes batched: 20 ops per Graph call</tspan>
+    <tspan x="579" dy="30">&#8226; Non-GUID device IDs skipped; all-bad feed aborts</tspan>
+  </text>
+
+  <!-- card 3 -->
+  <rect x="1070" y="620" width="490" height="270" rx="10" fill="#EEF3FA" stroke="#C9D6E8" stroke-width="1.5"/>
+  <text x="1094" y="656" font-size="17" font-weight="700" fill="#107C10">Safety</text>
+  <text x="1094" y="692" font-size="13.5" fill="#222E3B">
+    <tspan x="1094" dy="0">&#8226; No forced reboots, no /ResetBase, no chkdsk /r</tspan>
+    <tspan x="1094" dy="30">&#8226; Temp cleanup age-gated (&gt;24 h); no service kills</tspan>
+    <tspan x="1094" dy="30">&#8226; Exit 0 = verified &#183; exit 1 = honest failure</tspan>
+    <tspan x="1094" dy="30">&#8226; Unknown error codes stay compliant &#8212; no loops</tspan>
+    <tspan x="1094" dy="30">&#8226; Repo templates untouched: code baked at deploy</tspan>
+  </text>
+
+  <!-- ================= stats chips ================= -->
+  <g font-size="14" font-weight="600" fill="#005A9E" text-anchor="middle">
+    <rect x="330" y="930" width="120" height="40" rx="20" fill="#DCEAF8" stroke="#C9D6E8"/>
+    <text x="390" y="955">49 groups</text>
+    <rect x="466" y="930" width="230" height="40" rx="20" fill="#DCEAF8" stroke="#C9D6E8"/>
+    <text x="581" y="955">49 remediation packages</text>
+    <rect x="712" y="930" width="150" height="40" rx="20" fill="#DCEAF8" stroke="#C9D6E8"/>
+    <text x="787" y="955">49 assignments</text>
+    <rect x="878" y="930" width="160" height="40" rx="20" fill="#DCEAF8" stroke="#C9D6E8"/>
+    <text x="958" y="955">57 tests passing</text>
+    <rect x="1054" y="930" width="216" height="40" rx="20" fill="#DCEAF8" stroke="#C9D6E8"/>
+    <text x="1162" y="955">one-click Install.cmd</text>
+  </g>
+
+  <!-- footer -->
+  <rect x="0" y="1010" width="1600" height="70" fill="#1B3A5B"/>
+  <text x="40" y="1052" font-size="15" fill="#FFFFFF">github.com/kajalkumarshal-07/IntunePatchPal (private)</text>
+  <text x="1560" y="1052" font-size="15" text-anchor="end" fill="#9FC4E8">Install.cmd &#8594; Deploy-Azure.ps1 &#8594; Deploy-ErrorGroupsAndRemediations.ps1</text>
+</svg>

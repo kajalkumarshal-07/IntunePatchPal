@@ -169,6 +169,7 @@ powershell -ExecutionPolicy Bypass -File .\App\IntuneAppErrorGroups-Local.ps1 -D
 | `Tests\Run-Tests.ps1` | Offline suite (57 assertions): parse checks, Graph pagination/retry/$batch, membership diff, detection helpers. No tenant needed |
 | `Tests\Build-Presentation.py` / `Build-Poster.py` | Regenerate `IntunePatchPal-Presentation.pptx` (26 slides, incl. core-functions walkthrough) and `IntunePatchPal-Poster.pptx` |
 | `poster.svg` / `Workflow-Animated.svg` | Full pipeline diagram, animated flow chart (open in a browser) |
+| `IntunePatchPal-Process.svg` / `IntunePatchPal-Process.png` | One-page process visual: the 5-stage loop (fails → fetch → group → fix → tidy), scheduler lanes, guardrails, stats |
 
 ---
 
