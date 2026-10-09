@@ -2,12 +2,18 @@
 
 ## Detection Script Template
 
-Use this detection logic in your Proactive Remediation detection script:
+`DetectionTemplate.ps1` ships with the logic for every code below:
 
 ```powershell
-$errorCode = (Get-CimInstance -ClassName Win32_QuickFixEngineering | ...).ReturnValue
-# or check WindowsUpdate.log / CBS.log for specific error patterns
+# full scan (fast, runs every cycle): pending reboot, disk, memory,
+#   BITS, partial WSUS policy - DISM only with -IncludeSlowChecks
+.\DetectionTemplate.ps1
+# targeted scan (group assignment context): the code Intune reported
+.\DetectionTemplate.ps1 -TargetErrorCode '-2147010798'
 ```
+
+Exit 0 = compliant, exit 1 = run remediation. Detection errors exit 0 by
+default (`-Strict` to change) so a broken detection cannot trigger remediation.
 
 ## Error Code Reference
 
@@ -15,9 +21,9 @@ $errorCode = (Get-CimInstance -ClassName Win32_QuickFixEngineering | ...).Return
 
 | Error Code | Hex | Description | Detection | Remediation Script |
 |---|---|---|---|---|
-| `-2147024784` | `0x80070070` | Not enough disk space | `Get-CimInstance Win32_LogicalDisk -Filter "DriveType=3" \| Where-Object { $_.FreeSpace -lt 5GB }` | `cleanmgr /sageset:1` then `cleanmgr /sagerun:1`, remove temp files: `Get-ChildItem "$env:TEMP" -Recurse \| Remove-Item -Force`, clean WinSxS: `DISM /Online /Cleanup-Image /StartComponentCleanup /ResetBase` |
-| `-2147024891` | `0x80070008` | Not enough memory | Check available RAM: `(Get-CimInstance Win32_OperatingSystem).FreePhysicalMemory` | Close non-essential services, increase page file: `wmic computersystem set AutomaticManagedPagefile=False` then set custom size. Reboot if needed. |
-| `-2147023890` | `0x80070570` | Corrupted file/disk | `chkdsk /f` required | Schedule `chkdsk C: /f /r`, reboot to run. Then retry updates. |
+| `-2147024784` | `0x80070070` | Not enough disk space | `Get-CimInstance Win32_LogicalDisk -Filter "DriveType=3" \| Where-Object { $_.FreeSpace -lt 5GB }` | Remove temp/WU-download files older than 24h, then `DISM /Online /Cleanup-Image /StartComponentCleanup` (never `/ResetBase` - it permanently blocks update uninstalls). `RemediationTemplate.ps1` verifies free space after cleanup. |
+| `-2147024891` | `0x80070008` | Not enough memory | Free physical RAM under 256 MB (`(Get-CimInstance Win32_OperatingSystem).FreePhysicalMemory -lt 262144`) | Report-only: top memory consumers + pagefile mode are written to the Intune report. Running services are never stopped for this. |
+| `-2147023890` | `0x80070570` | Corrupted file/disk | `Win32_Volume.DirtyBitSet` for C: | Read-only `Repair-Volume -Scan` by default. `chkdsk C: /f` (never `/r`) is only scheduled when the script is deployed with `-AllowChkdsk`. |
 
 ### Component Store & System Corruption
 
@@ -33,7 +39,7 @@ $errorCode = (Get-CimInstance -ClassName Win32_QuickFixEngineering | ...).Return
 |---|---|---|---|---|
 | `-2147023436` | `0x800705B4` | Operation timed out | Test network to WSUS/WU: `Test-NetConnection -ComputerName (Get-ItemProperty "HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate").WUServer` | Restart BITS service `Restart-Service bits`, clear SoftwareDistribution: `Stop-Service wuauserv bits; Remove-Item "$env:windir\SoftwareDistribution\*" -Recurse; Start-Service wuauserv bits`. Check proxy: `netsh winhttp show proxy`. |
 | `-2147012886` | `0x80072EEF` | Unknown name (DNS failure) | `Resolve-DnsName (Get-ItemProperty "HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate").WUServer` | Flush DNS: `ipconfig /flushdns; ipconfig /registerdns`. Check hosts file. Set alternate DNS: `netsh interface ip set dns "Ethernet" static 8.8.8.8` |
-| `-2147012855` | `0x80072EE2` | Network timeout | `Invoke-WebRequest -Uri "https://ctldl.windowsupdate.com" -TimeoutSec 10` fails | Restart network adapter: `Restart-NetAdapter -Name "Ethernet"`. Reset winsock: `netsh winsock reset`. Check firewall rules for Windows Update. |
+| `-2147012855` | `0x80072EE2` | Network timeout | `Invoke-WebRequest -Uri "https://ctldl.windowsupdate.com" -TimeoutSec 10` fails | Flush DNS: `ipconfig /flushdns; ipconfig /registerdns`. Restart WU stack: `Stop-Service wuauserv,bits -Force; Start-Service wuauserv,bits`. Check firewall rules for Windows Update. If persistent: guidance only - manual `netsh winsock reset` + adapter restart (never run automatically; breaks VPN/LSP software). |
 | `-2147012867` | `0x80072EFD` | Connection to server failed | Port test to WSUS 8530/443 fails | Check WSUS URL in registry. Verify firewall allows outbound 443/80/8530. Restart `Restart-Service wuauserv`. |
 | `-2147024809` | `0x80070057` | Bad parameter / corrupt metadata | Update catalog integrity check | Clear `SoftwareDistribution`, re-register WU: `regsvr32 /s wuapi.dll; regsvr32 /s wups.dll; regsvr32 /s wuwebv.dll`. Then `wuauclt /resetauthorization /detectnow` |
 
@@ -62,7 +68,7 @@ $errorCode = (Get-CimInstance -ClassName Win32_QuickFixEngineering | ...).Return
 | Error Code | Hex | Description | Detection | Remediation Script |
 |---|---|---|---|---|
 | `-2147467259` | `0x80004005` | Unspecified error | Check CBS.log + WindowsUpdate.log for root cause | Run `DISM /Online /Cleanup-Image /RestoreHealth`. Check event logs: `Get-WinEvent -LogName "System" -MaxEvents 50 \| Where-Object { $_.LevelDisplayName -eq "Error" }`. Retry after full reset: clear SfCDownloads, re-register WU DLLs. |
-| `-2147467260` | `0x80004004` | Operation aborted | Usually transient, retry | `wuauclt /detectnow` in a loop with retry logic. If persistent, clear SfCDownloads: `Remove-Item "$env:windir\Winsxs\pending.xml" -ErrorAction SilentlyContinue`. |
+| `-2147467260` | `0x80004004` | Operation aborted | Usually transient, retry | `wuauclt /detectnow` in a loop with retry logic. If persistent, inspect `Get-Content "$env:windir\Logs\CBS\CBS.log" -Tail 100`. `pending.xml` is never deleted (breaks in-flight servicing). |
 | `-2016410012` | `0x878A003C` | Updates handler cancelled | User or policy cancelled | Check `UpdatesDeployment.log`. No action needed unless persistent. Ensure deployments are not being expired early. |
 | `-2016410026` | `0x878A0046` | Internal updates handler error | Generic handler failure | Restart `CcmExec`: `Restart-Service ccmexec`. Clear `CCM\Cache`: `Remove-Item "$env:windir\CCM\Cache\*" -Recurse`. Force policy refresh: `Invoke-WmiMethod -Namespace root\ccm -Class SMS_CLIENT -Name TriggerSchedule "{00000000-0000-0000-0000-000000000114}"`. |
 

@@ -54,7 +54,7 @@
   <rect x="60" y="84" width="0" height="3" fill="#64b5f6">
     <animate attributeName="width" from="0" to="1280" dur="2.5s" fill="freeze" />
   </rect>
-  <text x="60" y="48" fill="#ffffff" font-size="30" font-weight="700">Intune Patch &amp; App Remediation &#8212; Animated Workflow</text>
+  <text x="60" y="48" fill="#ffffff" font-size="30" font-weight="700">IntunePatchPal &#8212; Animated Workflow</text>
   <text x="60" y="72" fill="#b0bec5" font-size="13.5">Daily automation finds failing devices &#8594; groups them by error code &#8594; runs targeted fixes via Proactive Remediations</text>
 
   <circle cx="1195" cy="45" r="9" fill="#4caf50">
@@ -73,8 +73,8 @@
     <text x="112" y="163" fill="#fff" font-size="16" font-weight="700">Azure Automation Runbook</text>
     <text x="80" y="183" fill="#e1bee7" font-size="11">Daily 06:00 &#8226; Managed Identity</text>
     <text x="80" y="207" fill="#fff" font-size="11.5" font-family="Consolas, monospace">Connect-MgGraph -Identity</text>
-    <text x="80" y="225" fill="#fff" font-size="11.5" font-family="Consolas, monospace">GET .../windowsUpdateStates</text>
-    <text x="80" y="243" fill="#fff" font-size="11.5" font-family="Consolas, monospace">GET .../mobileApps/{id}/deviceStatuses</text>
+    <text x="80" y="225" fill="#fff" font-size="11.5" font-family="Consolas, monospace">POST reports/*UpdateAlert*Report</text>
+    <text x="80" y="243" fill="#fff" font-size="11.5" font-family="Consolas, monospace">POST reports/*AppInstall*Report</text>
     <text x="80" y="261" fill="#fff" font-size="11">Collects failed patch + app installs</text>
     <rect x="60" y="130" width="380" height="170" rx="12" fill="#ffffff">
       <animate attributeName="opacity" values="0;0.3;0" dur="1.6s" repeatCount="indefinite" begin="2.0s" />
@@ -101,10 +101,10 @@
     <text x="508" y="163" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="700">2</text>
     <text x="532" y="163" fill="#fff" font-size="16" font-weight="700">Microsoft Graph API</text>
     <text x="500" y="183" fill="#90caf9" font-size="11">Queries device install states</text>
-    <text x="500" y="207" fill="#fff" font-size="11.5" font-family="Consolas, monospace">Patch: windowsUpdateStates</text>
-    <text x="500" y="225" fill="#fff" font-size="11.5" font-family="Consolas, monospace">  status='failed' &#8594; errorCode</text>
-    <text x="500" y="243" fill="#fff" font-size="11.5" font-family="Consolas, monospace">App: mobileApps deviceStatuses</text>
-    <text x="500" y="261" fill="#fff" font-size="11.5" font-family="Consolas, monospace">  installState='failed' &#8594; errorCode</text>
+    <text x="500" y="207" fill="#fff" font-size="11.5" font-family="Consolas, monospace">Patch: update alerts report</text>
+    <text x="500" y="225" fill="#fff" font-size="11.5" font-family="Consolas, monospace">  PolicyId eq &#8594; AlertMessage code</text>
+    <text x="500" y="243" fill="#fff" font-size="11.5" font-family="Consolas, monospace">App: app install status report</text>
+    <text x="500" y="261" fill="#fff" font-size="11.5" font-family="Consolas, monospace">  failed state/ErrorCode &#8594; code</text>
     <rect x="480" y="130" width="370" height="170" rx="12" fill="#ffffff">
       <animate attributeName="opacity" values="0;0.3;0" dur="1.6s" repeatCount="indefinite" begin="3.4s" />
     </rect>

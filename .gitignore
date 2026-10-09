@@ -1,0 +1,16 @@
+# OS / editor
+Thumbs.db
+.DS_Store
+~$*
+
+# Python
+__pycache__/
+*.pyc
+
+# local run artifacts
+*.log
+*.token
+
+# legacy artifact name (superseded by IntunePatchPal-*.pptx; ignored while a
+# local copy is open in PowerPoint)
+IntuneRemediations-Presentation.pptx

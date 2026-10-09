@@ -3,7 +3,12 @@
 ## Graph API Endpoint
 
 ```
-GET /beta/deviceManagement/mobileApps/{appId}/deviceStatuses?$filter=installState eq 'failed'
+POST /beta/deviceManagement/reports/retrieveDeviceAppInstallationStatusReport
+body: {"filter":"(ApplicationId eq '{appId}')","top":1000,"skip":0}
+
+Rows are filtered client-side on AppInstallState (failed/error) or a
+non-zero ErrorCode. (The old mobileApps/{appId}/deviceStatuses GET was
+retired from Graph.)
 ```
 
 ## Error Code Reference
