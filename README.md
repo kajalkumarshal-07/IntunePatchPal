@@ -205,6 +205,62 @@ Remediation output lines are `State|Detail` (e.g. `Verified|free space now 12.4 
 | `-Strict` | off | Detection errors exit 1 instead of 0 (broken detection normally must not trigger remediation) |
 | `-AllowChkdsk` | off (patch remediation) | Schedules `chkdsk C: /f` (never `/r`) at next reboot |
 
+## Adding New Error Codes & Remediations
+
+**Only need grouping?** Nothing to do — the nightly runbooks bucket whatever
+codes Intune reports and auto-create the marker-owned group
+`Intune-PatchError-<code>` / `Intune-AppError-<code>` on the next sweep.
+
+To also ship detection + remediation for the code:
+
+### 1. Document the code (the deployer parses this table)
+
+- Patch lane: `ERROR-REFERENCE.md` · App lane: `App\ERROR-REFERENCE.md`
+- Row format — the code **must be backticked in column 1**:
+
+  ```markdown
+  | `-2147012345` | `0x8007abcd` | short meaning | how to detect it | what the fix does |
+  ```
+
+- The **Description** column doubles as the `ReportOnly|…` guidance shown in
+  the Intune report for codes without a custom fix — write it for operators.
+
+### 2. Add the logic to the templates (optional, recommended)
+
+| File | Anchor | Contract |
+|---|---|---|
+| `DetectionTemplate.ps1` | `switch ($TargetErrorCode)` (~line 148) | add `'<code>' { …; Exit-NonCompliant $TargetErrorCode "reason" }` |
+| `RemediationTemplate.ps1` | `switch ($Code)` (~line 115) | action + verify → `Exit 0 Verified\|…` / `Exit 1 Failed\|…` |
+| `App\DetectionTemplate.ps1` | `switch ($TargetErrorCode)` (~line 120) | same as patch |
+| `App\RemediationTemplate.ps1` | `switch ($Code)` (~line 101) | same as patch |
+
+Skip this step and the deployer **auto-injects** a generic case: detection
+flags the group's devices non-compliant, remediation prints report-only
+guidance — safe, and never loops.
+
+### 3. Re-deploy (idempotent)
+
+```powershell
+.\Install.cmd        # or, per lane:
+powershell -ExecutionPolicy Bypass -File .\Deploy-ErrorGroupsAndRemediations.ps1 -Lane Patch   # or App
+```
+
+Creates the group, bakes the code into detection + remediation, creates or
+updates the Intune package, and re-asserts its assignment.
+
+### 4. Verify
+
+```powershell
+.\Tests\Run-Tests.ps1                          # 57/57
+```
+
+Then check Intune → Apps → Remediations: the new package is listed and
+assigned to its matching group.
+
+**Loop-safety defaults:** an unknown code in detection exits 0 (compliant —
+never re-triggers), while an unknown code in remediation exits 1 with an
+honest `No remediation defined` failure.
+
 ## Prod-Safety Behavior
 
 - **Group sync**: paged Graph reads, exponential-backoff retry on 429/5xx, membership
